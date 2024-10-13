@@ -13,7 +13,7 @@ spec:
     syncOptions:
       - CreateNamespace=true
   destination:
-    name: kind-shoot
+    name: in-cluster
     namespace: ingress-nginx
   sources:
     - repoURL: https://github.com/kubernetes/ingress-nginx

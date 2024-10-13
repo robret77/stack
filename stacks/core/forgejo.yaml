@@ -13,7 +13,7 @@ spec:
     syncOptions:
       - CreateNamespace=true
   destination:
-    name: kind-shoot
+    name: in-cluster
     namespace: forgejo
   sources:
     - repoURL: https://code.forgejo.org/forgejo-helm/forgejo-helm.git

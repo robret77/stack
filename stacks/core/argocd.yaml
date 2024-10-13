@@ -13,7 +13,7 @@ spec:
     syncOptions:
       - CreateNamespace=true
   destination:
-    name: kind-shoot
+    name: in-cluster
     namespace: argocd
   sources:
     - repoURL: https://github.com/argoproj/argo-helm
