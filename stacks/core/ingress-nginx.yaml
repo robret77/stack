@@ -1,0 +1,27 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: ingress-nginx
+  namespace: argocd
+  labels:
+    env: dev
+spec:
+  project: default
+  syncPolicy:
+    automated:
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+  destination:
+    name: kind-shoot
+    namespace: ingress-nginx
+  sources:
+    - repoURL: https://github.com/kubernetes/ingress-nginx
+      path: charts/ingress-nginx
+      targetRevision: HEAD
+      helm:
+        valueFiles:
+          - $values/stacks/core/components/ingress-nginx/values.yaml
+    - repoURL: https://github.com/robret77/stack
+      targetRevision: HEAD
+      ref: values

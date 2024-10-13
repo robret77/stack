@@ -1,0 +1,27 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: forgejo
+  namespace: argocd
+  labels:
+    env: dev
+spec:
+  project: default
+  syncPolicy:
+    automated:
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+  destination:
+    name: kind-shoot
+    namespace: forgejo
+  sources:
+    - repoURL: https://code.forgejo.org/forgejo-helm/forgejo-helm.git
+      path: .
+      targetRevision: HEAD
+      helm:
+        valueFiles:
+          - $values/stacks/core/components/forgejo/values.yaml
+    - repoURL: https://github.com/robret77/stack
+      targetRevision: HEAD
+      ref: values

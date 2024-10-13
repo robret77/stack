@@ -1,0 +1,36 @@
+controller:
+  updateStrategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+  hostPort:
+    enabled: true
+  terminationGracePeriodSeconds: 0
+  service:
+    type: NodePort
+  watchIngressWithoutClass: true
+
+  nodeSelector:
+    ingress-ready: "true"
+  tolerations:
+    - key: "node-role.kubernetes.io/master"
+      operator: "Equal"
+      effect: "NoSchedule"
+    - key: "node-role.kubernetes.io/control-plane"
+      operator: "Equal"
+      effect: "NoSchedule"
+
+  publishService:
+    enabled: false
+  extraArgs:
+    publish-status-address: localhost
+    # added for idpbuilder
+    enable-ssl-passthrough: ""
+
+  # added for idpbuilder
+  allowSnippetAnnotations: true
+
+  # added for idpbuilder
+  config: 
+    proxy-buffer-size: 32k
+    use-forwarded-headers: "true"

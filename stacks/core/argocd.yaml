@@ -1,0 +1,27 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: argocd
+  namespace: argocd
+  labels:
+    env: dev
+spec:
+  project: default
+  syncPolicy:
+    automated:
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+  destination:
+    name: kind-shoot
+    namespace: argocd
+  sources:
+    - repoURL: https://github.com/argoproj/argo-helm
+      path: charts/argo-cd
+      targetRevision: HEAD
+      helm:
+        valueFiles:
+          - $values/stacks/core/components/argocd/values.yaml
+    - repoURL: https://github.com/robret77/stack
+      targetRevision: HEAD
+      ref: values

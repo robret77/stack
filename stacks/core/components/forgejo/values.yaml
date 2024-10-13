@@ -1,0 +1,59 @@
+redis-cluster:
+  enabled: false
+postgresql:
+  enabled: false
+postgresql-ha:
+  enabled: false
+
+persistence:
+  enabled: true
+  size: 5Gi
+
+test:
+  enabled: false
+
+gitea:
+  admin:
+    existingSecret: forgejo-credential
+  config:
+    database:
+      DB_TYPE: sqlite3
+    session:
+      PROVIDER: memory
+    cache:
+      ADAPTER: memory
+    queue:
+      TYPE: level
+    server:
+      DOMAIN: 'gitea.reitzrobert77.de'
+      ROOT_URL: 'https://gitea.reitzrobert77.de:443'
+
+service:
+  ssh:
+    type: NodePort
+    nodePort: 32222
+    externalTrafficPolicy: Local
+
+ingress:
+  # NOTE: The ingress is generated in a later step for path based routing feature See: hack/argo-cd/generate-manifests.sh
+  enabled: true
+  className: nginx
+  annotations: 
+    nginx.ingress.kubernetes.io/proxy-body-size: 512m
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+  hosts:
+    - host: gitea.reitzrobert77.de
+      paths:
+      - path: /
+        pathType: Prefix
+  tls:
+    - hosts:
+      - gitea.reitzrobert77.de
+      secretName: forgejo-net-tls
+
+image:
+  pullPolicy: "IfNotPresent"
+  # Overrides the image tag whose default is the chart appVersion.
+  #tag: "8.0.3"
+  # Adds -rootless suffix to image name
+  rootless: true
